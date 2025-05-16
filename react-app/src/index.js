@@ -8,6 +8,8 @@ import configureStore from "./store";
 import * as sessionActions from "./store/session";
 import App from "./App";
 
+import { TowerContext } from "./context/TowerContext";
+
 import "./index.css";
 
 const store = configureStore();
@@ -21,12 +23,14 @@ if (process.env.NODE_ENV !== "production") {
 function Root() {
 	return (
 		<ModalProvider>
-			<Provider store={store}>
-				<BrowserRouter>
-					<App />
-					<Modal />
-				</BrowserRouter>
-			</Provider>
+			{/* <TowerContext.Provider value={{}}> */}
+				<Provider store={store}>
+					<BrowserRouter>
+						<App />
+						<Modal />
+					</BrowserRouter>
+				</Provider>
+			{/* </TowerContext.Provider> */}
 		</ModalProvider>
 	);
 }

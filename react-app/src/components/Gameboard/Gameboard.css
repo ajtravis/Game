@@ -1,0 +1,42 @@
+.game-board-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1e1e1e;
+}
+
+.grid-board {
+  display: grid;
+  grid-template-columns: repeat(7, 50px);
+  gap: 0;
+}
+
+.tile {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.tile.empty {
+  background-color: #6aa84f;
+  box-shadow: inset 0 0 4px #3e8231;
+}
+
+.tile.with-tower {
+  background-color: #444;
+  box-shadow: inset 0 0 5px #000;
+}
+
+.tower-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ff4444;
+  border: 2px solid white;
+}

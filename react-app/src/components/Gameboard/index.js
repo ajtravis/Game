@@ -19,7 +19,7 @@ const GameBoard = () => {
     setTiles(prev => {
       const newTiles = prev.map((row, r) =>
         row.map((tile, c) => {
-          if (r === rowIndex && c === colIndex && !tile.hasTower) {
+          if (r === rowIndex && c === colIndex && !tile.hasTower && !tile.isPath) {
             return {
               ...tile,
               hasTower: true,

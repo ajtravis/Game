@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
-import { Tower, allTowers } from '../../assets/towers';
+import React, { useState, useContext } from 'react';
+import { TowerContext } from '../../context/TowerContext';
+// import { Tower, allTowers } from '../../assets/towers';
 import { generateGameBoard } from '../../assets/getGameBoard';
 import { getGameBoard } from '../../assets/maps';
+import TowerBar from '../TowerBar';
+import towersObj from '../../assets/towers';
 import './Gameboard.css';
 
+
 const GameBoard = () => {
-  
+  const { towerType } = useContext(TowerContext);
+  const [selectedTowerIndex, setSelectedTowerIndex] = useState(0);
   const [tiles, setTiles] = useState(() => getGameBoard(4)); // 0-4 for different maps
 
-  const placeTower = (rowIndex, colIndex, towerTypeIndex) => {
+
+  const placeTower = (rowIndex, colIndex) => {
+    
     setTiles(prev => {
       const newTiles = prev.map((row, r) =>
         row.map((tile, c) => {
@@ -16,7 +23,7 @@ const GameBoard = () => {
             return {
               ...tile,
               hasTower: true,
-              tower: allTowers[towerTypeIndex]
+              tower: towerType
             };
           }
           return tile;
@@ -26,7 +33,14 @@ const GameBoard = () => {
     });
   };
 
+  
+
   return (
+    <>
+    <TowerBar
+      selectedTowerIndex={selectedTowerIndex}
+      setSelectedTowerIndex={setSelectedTowerIndex}
+    />
     <div className="game-board-wrapper">
       <div
         className="grid-board"
@@ -34,19 +48,24 @@ const GameBoard = () => {
       >
         {tiles.map((row, rowIndex) =>
           row.map((tile, colIndex) => (
+            
             <div
               key={`${rowIndex}-${colIndex}`}
+              
               className={`tile 
                 ${tile.isPath ? 'path' : 'empty'} 
-                ${tile.hasTower ? 'with-tower' : ''}`}
-              onClick={() => placeTower(rowIndex, colIndex, 0)} // place basic tower
+                ${tile.hasTower ? 'with-tower' : ''}`
+              }
+              onClick={() => placeTower(rowIndex, colIndex)} // place basic tower
             >
-              {tile.hasTower && <div className="tower-icon" />}
+              {tile.hasTower && <div className={`tower-icon + ${tile.tower}`} />}
             </div>
           ))
         )}
       </div>
     </div>
+    </>
+    
   );
 };
 

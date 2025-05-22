@@ -1,0 +1,67 @@
+.tower-bar {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px;
+  background-color: #1e1e1e;
+  border-top: 2px solid #333;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4);
+  font-family: 'Arial', sans-serif;
+}
+
+.tower-button {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 180px;
+  background-color: #333;
+}
+
+.tower-button:hover {
+  transform: scale(1.03);
+  opacity: 0.95;
+}
+
+.tower-button.selected {
+  border-color: #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+.emoji {
+  font-size: 1.8rem;
+  margin-right: 12px;
+}
+
+.tower-labels {
+  text-align: left;
+}
+
+.tower-name {
+  font-size: 1rem;
+  font-weight: bold;
+  display: block;
+}
+
+.tower-description {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* Tower type colors */
+.tower-basic {
+  background-color: #3498db;
+}
+
+.tower-fast {
+  background-color: #f1c40f;
+  color: #333;
+}
+
+.tower-close {
+  background-color: #e74c3c;
+}

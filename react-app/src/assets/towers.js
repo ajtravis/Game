@@ -1,20 +1,22 @@
 class Tower {
-  constructor(attack, range, speed) {
+  constructor(type, attack, range, speed) {
+    this.type = type;
     this.attack = attack;
     this.range = range;
     this.speed = speed;
   }
   getStats() {
     return {
+      type: this.type,
       attack: this.attack,
       range: this.range,
       speed: this.speed
     };
   }
 }
-const basicTower = new Tower(5, 2, 1.0);
-const fastTower = new Tower(1, 2, 5.0);
-const closeTower = new Tower(15, 1, 0.5);
-const allTowers = [basicTower, fastTower, closeTower]
+const basicTower = new Tower('basic', 5, 2, 1.0);
+const fastTower = new Tower('fast', 1, 2, 5.0);
+const closeTower = new Tower('close', 15, 1, 0.5);
+const allTowers = {"basic": JSON.stringify(basicTower), "fast": JSON.stringify(fastTower), "close": JSON.stringify(closeTower)}
 
-export {Tower, allTowers}
+export default allTowers

@@ -25,11 +25,43 @@
 }
 
 .tower-icon {
-  width: 12px;
-  height: 12px;
+  width: 80%;
+  height: 80%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === BASIC TOWER === */
+.basic {
+  background: radial-gradient(circle, #3498db 40%, #2980b9 100%);
   border-radius: 50%;
-  background-color: #ff4444;
-  border: 1px solid white;
+  border: 2px solid #1c5f8a;
+  box-shadow: 0 0 4px #2980b9;
+}
+
+/* === FAST TOWER === */
+.fast {
+  background: radial-gradient(circle, #f1c40f 30%, #f39c12 90%);
+  border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%; /* irregular shape */
+  border: 1px dashed #d68910;
+  animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 4px #f1c40f; }
+  50% { transform: scale(1.05); box-shadow: 0 0 10px #f39c12; }
+  100% { transform: scale(0.95); box-shadow: 0 0 4px #f1c40f; }
+}
+
+/* === STRONG TOWER === */
+.close {
+  background: linear-gradient(135deg, #e74c3c, #922b21);
+  border: 3px solid #641e16;
+  border-radius: 8%;
+  box-shadow: inset 0 0 4px #000;
+  transform: scale(1.1); /* slightly larger */
 }
 
 .grid-board {

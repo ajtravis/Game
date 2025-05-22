@@ -19,5 +19,10 @@ const basicEnemy = new Enemy("basic", 1, 10, 1);
 const fastEnemy = new Enemy("fast", 1, 5, 5);
 const tankyEnemy = new Enemy("tanky", 5, 50, 0.5);
 
-const enemysObject = {"basic": JSON.stringify(basicEnemy), "fast": JSON.stringify(fastEnemy), "tanky": JSON.stringify(tankyEnemy)}
+const enemiesObject = {
+  basic: basicEnemy,
+  fast: fastEnemy,
+  tanky: tankyEnemy
+};
+
 export default enemysObject

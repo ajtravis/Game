@@ -10,7 +10,7 @@ import './Gameboard.css';
 
 const GameBoard = () => {
   const { towerType } = useContext(TowerContext);
-  const [selectedTowerIndex, setSelectedTowerIndex] = useState(0);
+  
   const [tiles, setTiles] = useState(() => getGameBoard(4)); // 0-4 for different maps
 
 
@@ -38,8 +38,6 @@ const GameBoard = () => {
   return (
     <>
     <TowerBar
-      selectedTowerIndex={selectedTowerIndex}
-      setSelectedTowerIndex={setSelectedTowerIndex}
     />
     <div className="game-board-wrapper">
       <div
@@ -58,7 +56,7 @@ const GameBoard = () => {
               }
               onClick={() => placeTower(rowIndex, colIndex)} // place basic tower
             >
-              {tile.hasTower && <div className={`tower-icon + ${tile.tower}`} />}
+              {tile.hasTower && <div className={`tower-icon ${tile.tower}`} />}
             </div>
           ))
         )}

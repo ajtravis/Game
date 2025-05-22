@@ -77,6 +77,8 @@ function convertToBoard(charMap) {
       isPath: cell === 'P',
       hasTower: false,
       tower: null,
+      isStart: false,
+      isEnd: false
     }))
   );
 }

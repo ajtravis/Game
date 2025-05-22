@@ -1,4 +1,4 @@
-class Tower {
+export class Tower {
   constructor(type, attack, range, speed) {
     this.type = type;
     this.attack = attack;

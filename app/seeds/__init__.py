@@ -1,6 +1,8 @@
 from flask.cli import AppGroup
 from .users import seed_users, undo_users
 from .tiles import seed_tiles, undo_tiles
+from .towers import seed_towers, undo_towers
+from .enemies import seed_enemies, undo_enemies
 
 from app.models.db import db, environment, SCHEMA
 
@@ -20,6 +22,8 @@ def seed():
         undo_users()
     seed_users()
     seed_tiles()
+    seed_towers()
+    seed_enemies()
     # Add other seed functions here
 
 

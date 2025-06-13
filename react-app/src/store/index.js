@@ -1,11 +1,13 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import session from './session'
+import session from './session';
 import tilesReducer from './tile';
+import mapReducer from './map';
 
 const rootReducer = combineReducers({
   session,
-  tiles: tilesReducer
+  tiles: tilesReducer,
+  map: mapReducer
 });
 
 

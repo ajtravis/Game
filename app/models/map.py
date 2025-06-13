@@ -21,5 +21,4 @@ class Map(db.Model):
         return {
             'id': self.id,
             'tiles': [tile.to_dict() for tile in self.tiles]
-
         }

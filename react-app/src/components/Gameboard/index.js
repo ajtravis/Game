@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { thunkOneTile } from '../../store/tile';
+import { thunkMapTiles } from '../../store/map';
 import { TowerContext } from '../../context/TowerContext';
 // import { Tower, allTowers } from '../../assets/towers';
 import { generateGameBoard } from '../../assets/getGameBoard';
@@ -14,11 +15,13 @@ import './Gameboard.css';
 const GameBoard = () => {
   const { towerType } = useContext(TowerContext);
   const dispatch = useDispatch();
+  const [map, setMap] = useState(1)
   const [tiles, setTiles] = useState(() => getGameBoard(4)); // 0-4 for different maps
   const [t, setT] = useState(1)
 
   useEffect(() => {
-        dispatch(thunkOneTile(t));    
+        dispatch(thunkOneTile(t));
+        dispatch(thunkMapTiles(map));    
 
     }, [dispatch]);
 

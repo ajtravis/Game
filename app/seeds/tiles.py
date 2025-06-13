@@ -85,7 +85,7 @@ def seed_tiles():
                   has_tower=False,
                   is_spawn=(char == "S"),
                   is_base=(char == "B"),
-                  map_id=i
+                  map_id=(i+1)
 
               )
               db.session.add(tile)

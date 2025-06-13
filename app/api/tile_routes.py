@@ -10,4 +10,3 @@ def get_map_tile(id):
     tile = Tile.query.get(id)
     return tile.to_dict()
 
-    

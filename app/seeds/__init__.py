@@ -22,7 +22,7 @@ def seed():
         # Make sure to add all your other model's undo functions below
         undo_users()
     seed_users()
-    seed_maps
+    seed_maps()
     seed_tiles()
     seed_towers()
     seed_enemies()

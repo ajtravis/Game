@@ -1,5 +1,6 @@
 from flask.cli import AppGroup
 from .users import seed_users, undo_users
+from .maps import seed_maps, undo_maps
 from .tiles import seed_tiles, undo_tiles
 from .towers import seed_towers, undo_towers
 from .enemies import seed_enemies, undo_enemies
@@ -21,6 +22,7 @@ def seed():
         # Make sure to add all your other model's undo functions below
         undo_users()
     seed_users()
+    seed_maps
     seed_tiles()
     seed_towers()
     seed_enemies()
@@ -29,7 +31,11 @@ def seed():
 
 # Creates the `flask seed undo` command
 @seed_commands.command('undo')
-def undo():
-    undo_users()
+def undo(): 
     undo_tiles()
+    undo_maps()
+    undo_towers()
+    undo_enemies()
+    undo_users()
+   
     # Add other undo functions here

@@ -38,4 +38,3 @@ def undo_towers():
     else:
         db.session.execute("DELETE FROM towers")
 
-    db.session.commit()

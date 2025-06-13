@@ -2,7 +2,7 @@ from app.models import db, Tile, environment, SCHEMA
 
 raw_maps = [
   [
-    "PPPPPPPPPPPP",
+    "BPPPPPPPPPPP",
     "...........P",
     "...........P",
     "...........P",
@@ -13,10 +13,10 @@ raw_maps = [
     "...........P",
     "...........P",
     "...........P",
-    "PPPPPPPPPPPP",
+    "SPPPPPPPPPPP",
   ],
   [
-    "P...........",
+    "B...........",
     "P...........",
     "PPPPP.......",
     "....P.......",
@@ -26,11 +26,11 @@ raw_maps = [
     ".......PP...",
     "PPPPPPPP....",
     "P......P....",
-    "P......PPPPP",
-    "P...........",
+    "P......PPPPS",
+    "S...........",
   ],
   [
-    "PPP.........",
+    "SPP.........",
     "..P.........",
     "..PPPPP.....",
     "......P.....",
@@ -40,11 +40,11 @@ raw_maps = [
     ".P..........",
     ".P..........",
     ".P..........",
-    ".PPPPPPPPPPP",
+    ".PPPPPPPPPPB",
     "............",
   ],
   [
-    ".....P......",
+    ".....S......",
     ".....P......",
     ".....P......",
     ".....P......",
@@ -54,11 +54,11 @@ raw_maps = [
     "........P...",
     "..PPPPPPP...",
     "..P.........",
-    "..PPPPPPPPPP",
+    "..PPPPPPPPPB",
     "............",
   ],
   [
-    "PPP.........",
+    "BPP.........",
     "..P.........",
     "..P.PPPPPP..",
     "..P.P....P..",
@@ -69,20 +69,27 @@ raw_maps = [
     "..PPP.P.....",
     "......PPPPPP",
     "...........P",
-    "PPPPPPPPPPPP",
+    "SPPPPPPPPPPP",
   ],
 ]
 
-def seed_tiles(m=0):
-    for y, row in enumerate(raw_maps[m]):
-        for x, char in enumerate(row):
-            tile = Tile(
-                x=x,
-                y=y,
-                is_path=(char == "P"),
-                has_tower=False,
-            )
-            db.session.add(tile)
+def seed_tiles():
+    i = 0
+    while i < len(raw_maps):
+      for y, row in enumerate(raw_maps[i]):
+          for x, char in enumerate(row):
+              tile = Tile(
+                  x=x,
+                  y=y,
+                  is_path=(char == "P"),
+                  has_tower=False,
+                  is_spawn=(char == "S"),
+                  is_base=(char == "B"),
+                  map_id=i
+
+              )
+              db.session.add(tile)
+      i+=1
     db.session.commit()
     
 def undo_tiles():

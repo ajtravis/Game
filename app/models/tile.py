@@ -12,7 +12,17 @@ class Tile(db.Model):
     y = db.Column(db.Integer, nullable=False)
     is_path= db.Column(db.Boolean, nullable=False)
     has_tower = db.Column(db.Boolean, nullable=False)
+    is_spawn= db.Column(db.Boolean, nullable=False)
+    is_base= db.Column(db.Boolean, nullable=False)
     
+    map_id = db.Column(
+    db.Integer,
+    db.ForeignKey(add_prefix_for_prod("maps.id")),
+    nullable=False
+    )
+
+    map = db.relationship("Map", back_populates="tiles")
+
     tile_tower = db.relationship("Tower", back_populates="tower_tile")
     tile_enemy = db.relationship("Enemy", back_populates="enemy_tile")
 
@@ -24,6 +34,7 @@ class Tile(db.Model):
             'x': self.x,
             'y': self.y,
             'is_path': self.is_path,
-            'has_tower': self.has_tower,
-        
+            'is_spawn': self.is_spawn,
+            'is_base': self.is_base,
+            'map_id': self.map_id,
         }

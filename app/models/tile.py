@@ -25,8 +25,5 @@ class Tile(db.Model):
             'y': self.y,
             'is_path': self.is_path,
             'has_tower': self.has_tower,
-            # 'tower_id': self.tower_id
-            # 'created_at': self.created_at,
-            
-            # 'category_ids': [c.id for c in self.product_categories]
+        
         }

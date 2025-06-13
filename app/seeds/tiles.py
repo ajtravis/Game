@@ -73,8 +73,8 @@ raw_maps = [
   ],
 ]
 
-def seed_tiles():
-    for y, row in enumerate(raw_maps[0]):
+def seed_tiles(m=0):
+    for y, row in enumerate(raw_maps[m]):
         for x, char in enumerate(row):
             tile = Tile(
                 x=x,

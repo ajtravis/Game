@@ -12,13 +12,7 @@ class Tile(db.Model):
     y = db.Column(db.Integer, nullable=False)
     is_path= db.Column(db.Boolean, nullable=False)
     has_tower = db.Column(db.Boolean, nullable=False)
-    # tower_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("towers.id")))
-    # created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # relationships
-    # product_user = db.relationship("User", back_populates="user_product")
-    # product_item = db.relationship("Cart_Item", back_populates="item_product")
-    # product_review = db.relationship("Review", back_populates="review_product")
+    
     tile_tower = db.relationship("Tower", back_populates="tower_tile")
     tile_enemy = db.relationship("Enemy", back_populates="enemy_tile")
 

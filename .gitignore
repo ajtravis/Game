@@ -7,3 +7,4 @@ __pycache__/
 *dev.db
 node_modules
 .flaskenv
+migrations/versions/0cfa225a0bed_.py

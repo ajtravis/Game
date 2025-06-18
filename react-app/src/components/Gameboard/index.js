@@ -43,7 +43,7 @@ const GameBoard = () => {
       return newTiles;
     });
   };
-
+  
   
 
   return (

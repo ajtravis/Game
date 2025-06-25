@@ -9,6 +9,7 @@ from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .api.tile_routes import tile_routes
 from .api.map_routes import map_routes
+from .api.enemy_routes import enemy_routes
 from .seeds import seed_commands
 from .config import Config
 

@@ -8,4 +8,5 @@ enemy_routes = Blueprint('enemies', __name__)
 @enemy_routes.route('/all')
 def get_enemies():
     enemies = Enemy.query.all()
-     return {'enemies': [enemy.to_dict() for enemy in enemies]}
+    # return {'enemies': [enemy.to_dict() for enemy in enemies]}
+    return [enemy.to_dict() for enemy in enemies]

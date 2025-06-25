@@ -1,19 +1,19 @@
-const GET_MAP_TILES = '/maps/GET_MAP_TITLES'
+const GET_ENEMIES = '/enemies/GET_ENEMIES'
 
-const getMapTiles = (map) => ({
-	type: GET_MAP_TILES,
-    map
+const getEnemies = (enemies) => ({
+	type: GET_ENEMIES,
+    enemies
 });
 
-export const thunkMapTiles = (id) => async (dispatch) => {
-	const response = await fetch(`/api/maps/${id}`, {
+export const thunkGetEnemies = () => async (dispatch) => {
+	const response = await fetch(`/api/enemies/all`, {
 		headers: { "Content-Type": "application/json" },
 	})
 	// console.log(response, 'this is respond from backend')
 	if (response.ok) {
 		const data = await response.json();
 		// console.log(data, '!!just came from backend')
-		dispatch(getMapTiles(data));
+		dispatch(getEnemies(data));
 		return null
 		// return response
 	}
@@ -26,12 +26,13 @@ export const thunkMapTiles = (id) => async (dispatch) => {
 }
 
 const initialState = {}
-export default function mapReducer(state = initialState, action) {
+export default function enemyReducer(state = initialState, action) {
 	let newState = { ...state }
 	switch (action.type) {
-		case GET_MAP_TILES:
-			let tiles = action.map.tiles
-			for (let t of tiles) newState[t.id] = t
+		case GET_ENEMIES:
+			
+			let enemies = action.enemies
+			for (let e of enemies) newState[e.id] = e
 			return newState
         default:
             return state;

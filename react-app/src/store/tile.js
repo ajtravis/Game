@@ -29,7 +29,7 @@ const initialState = {}
 export default function tilesReducer(state = initialState, action) {
 	let newState = { ...state }
 	switch (action.type) {
-		case getTile:
+		case GET_TILE:
 			let t = action.product
 			// console.log(one, 'this is the reducer')
 			newState.oneTile = t

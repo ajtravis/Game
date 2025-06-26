@@ -20,10 +20,11 @@ const GameBoard = () => {
   const enemyList = Object.values(enemies)
   const [nextEnemy, setNextEnemy] = useState(0)
   const [map, setMap] = useState(useSelector(state => state.map?.id))
+  const tileList = Object.values(useSelector)
   const [tiles, setTiles] = useState(() => getGameBoard(0)); // 0-4 for different maps
   const [t, setT] = useState(1)
-
-
+  
+  
 
   // const spawnEnemy = () =>
   // {
@@ -34,7 +35,7 @@ const GameBoard = () => {
   const changeMap = (id) => {
     setMap(id)
     setTiles(() => getGameBoard((id-1)))
-    console.log(Object.keys(tiles))
+    console.log(tiles)
   }
 
   useEffect(() => {
@@ -70,16 +71,19 @@ const GameBoard = () => {
     />
     <div>
       <button onClick={() => changeMap(1)}>
-        1
+        Map 1
       </button>
       <button onClick={() => changeMap(2)}>
-        2
+        Map 2
       </button>
       <button onClick={() => changeMap(3)}>
-        3
+        Map 3
       </button>
       <button onClick={() => changeMap(4)}>
-        4
+        Map 4
+      </button>
+      <button onClick={() => changeMap(4)}>
+        Map 5
       </button>
     </div>
     <div className="game-board-wrapper">
@@ -95,11 +99,13 @@ const GameBoard = () => {
               
               className={`tile 
                 ${tile.isPath ? 'path' : 'empty'} 
-                ${tile.hasTower ? 'with-tower' : ''}`
+                ${tile.hasTower ? 'with-tower' : ''}
+                `
               }
               id= {`tile-${tile?.id}`}
               onClick={() => placeTower(rowIndex, colIndex)} // place basic tower
             >
+            
               {tile.hasTower && <div className={`tower-icon ${tile.tower}`} />}
             </div>
           ))

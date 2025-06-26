@@ -37,6 +37,7 @@ export default function mapReducer(state = initialState, action) {
 	switch (action.type) {
 		case GET_MAP_TILES:
 			newState.id = action.map.id;
+			newState.tiles = {}
 			let tiles = action.map.tiles;
 			for (let t of tiles) newState.tiles[t.id] = t;
 			return newState;

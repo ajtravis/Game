@@ -8,6 +8,8 @@ class Map(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
+    spawn1 = db.Column(db.Integer)
+    spawn2 = db.Column(db.Integer)
     
     tiles = db.relationship(
         "Tile",
@@ -20,5 +22,7 @@ class Map(db.Model):
 
         return {
             'id': self.id,
+            'spawn1': self.spawn1,
+            'spawn2': self.spawn2,
             'tiles': [tile.to_dict() for tile in self.tiles]
         }

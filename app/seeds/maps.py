@@ -3,11 +3,11 @@ from sqlalchemy.sql import text
 
 def seed_maps():
     maps = [
-        Map(),  # id will be assigned automatically
-        Map(),
-        Map(),
-        Map(),
-        Map()
+        Map(spawn1=1),  # id will be assigned automatically
+        Map(spawn1=1),
+        Map(spawn1=1),
+        Map(spawn1=1),
+        Map(spawn1=1)
     ]
     db.session.add_all(maps)
     db.session.commit()

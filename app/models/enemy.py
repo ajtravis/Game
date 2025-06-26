@@ -13,7 +13,7 @@ class Enemy(db.Model):
     description = db.Column(db.Text, nullable=False)
     health = db.Column(db.Integer, nullable=False)
     speed = db.Column(db.Integer, nullable=False)
-    tile_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("tiles.id")), nullable=False)
+    tile_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("tiles.id")))
     # created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # relationships
@@ -32,6 +32,7 @@ class Enemy(db.Model):
             'description': self.description,
             'health': self.health,
             'speed': self.speed,
+            'tile_id': self.tile_id
             # 'created_at': self.created_at,
             
             # 'category_ids': [c.id for c in self.product_categories]

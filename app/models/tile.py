@@ -10,6 +10,7 @@ class Tile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     x = db.Column(db.Integer, nullable=False)
     y = db.Column(db.Integer, nullable=False)
+    next_tile=db.Column(db.Integer, nullable=True, default=None)
     is_path= db.Column(db.Boolean, nullable=False)
     has_tower = db.Column(db.Boolean, nullable=False)
     is_spawn= db.Column(db.Boolean, nullable=False)

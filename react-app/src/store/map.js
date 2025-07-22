@@ -31,12 +31,13 @@ export const thunkMapTiles = (id) => async (dispatch) => {
 	else return { errors: ["An error occurred. Please try again."] }
 }
 
-const initialState = {id: 0, tiles: {}, spawn1: null, spawn2: null}
+const initialState = {id: null, tiles: {}, spawn: null}
 export default function mapReducer(state = initialState, action) {
 	let newState = { ...state }
 	switch (action.type) {
 		case GET_MAP_TILES:
 			newState.id = action.map.id;
+			newState.spawn = action.map.spawn
 			newState.tiles = {}
 			let tiles = action.map.tiles;
 			for (let t of tiles) newState.tiles[t.id] = t;

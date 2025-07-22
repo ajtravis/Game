@@ -32,7 +32,8 @@ class Enemy(db.Model):
             'description': self.description,
             'health': self.health,
             'speed': self.speed,
-            'tile_id': self.tile_id
+            'tile_id': self.tile_id,
+            'enemy_tile':self.enemy_tile
             # 'created_at': self.created_at,
             
             # 'category_ids': [c.id for c in self.product_categories]

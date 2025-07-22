@@ -2,12 +2,13 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { thunkOneTile } from '../../store/tile';
 import { thunkMapTiles } from '../../store/map';
-import { thunkGetEnemies } from '../../store/enemy';
+import { thunkGetEnemies, thunkMoveEnemies, thunkSpawnEnemy } from '../../store/enemy';
 import { TowerContext } from '../../context/TowerContext';
 // import { Tower, allTowers } from '../../assets/towers';
 import { generateGameBoard } from '../../assets/getGameBoard';
 import { getGameBoard } from '../../assets/maps';
 import { to12x12Grid } from './CreateMap';
+
 
 import TowerBar from '../TowerBar';
 import towersObj from '../../assets/towers';
@@ -26,31 +27,39 @@ const GameBoard = () => {
   const [t, setT] = useState(1)
 
   const tileList = useSelector(state => Object.values(state.map?.tiles));
+  const { protos, active } = useSelector(s => s.enemies);
 
-  const tileRows = [];
-  const width = 12; // or dynamically detect max x + 1
-  const height = 12; // or max y + 1
 
-  // for (let y = 0; y < height; y++) {
-  //   const row = tileList.filter(tile => tile.y === y).sort((a, b) => a.x - b.x);
-  //   tileRows.push(row);
-  //   console.log(tileList)
-  // }
 
-  // const spawnEnemy = () =>
-  // {
-  //   let enemy = enemies[nextEnemy]
-  //   setNextEnemy(nextEnemy + 1)
-  // }
   const grid = to12x12Grid(tileList);
   const changeMap = (id) => {
     setMap(id)
     setTiles(() => getGameBoard((id - 1)))
     console.log(tileList)
   }
-  
+
+  // fetch protos
   useEffect(() => {
-    dispatch(thunkGetEnemies())
+    dispatch(thunkGetEnemies());
+  }, [dispatch]);
+
+  // spawn a new enemy every 3s
+  useEffect(() => {
+    const id = setInterval(() => {
+      dispatch(thunkSpawnEnemy('basic')); // or cycle types
+    }, 3000);
+    return () => clearInterval(id);
+  }, [dispatch]);
+
+  // move enemies every tick
+  useEffect(() => {
+    const tick = setInterval(() => {
+      dispatch(thunkMoveEnemies());
+    }, 2000);
+    return () => clearInterval(tick);
+  }, [dispatch]);
+
+  useEffect(() => {
     dispatch(thunkOneTile(t));
     dispatch(thunkMapTiles(map));
     ;
@@ -77,7 +86,7 @@ const GameBoard = () => {
 
 
 
-  return(
+  return (
     <>
       <TowerBar
       />
@@ -99,21 +108,24 @@ const GameBoard = () => {
         </button>
       </div>
       <div className="game-board-wrapper">
-         <div
-        className="grid-board"
-        style={{ gridTemplateColumns: 'repeat(12, 32px)' }}
-      >
-        {grid.map((row, rowIndex) =>
-          row.map((tile, colIndex) => (
-            <div
-              key={tile.id ?? `${rowIndex}-${colIndex}`}
-              className={`tile ${tile.is_path ? 'path' : 'empty'}`}
-            >
-              {/* optional content */}
-            </div>
-          ))
-        )}
-      </div>
+        <div
+          className="grid-board"
+          style={{ gridTemplateColumns: 'repeat(12, 32px)' }}
+        >
+          {grid.map((row, r) =>
+            row.map(tile => {
+              const here = active.filter(e => e.tileId === tile.id);
+              return (
+                <div key={tile.id} className={`${tile.id} tile ${tile.is_path ? 'path' : 'empty'} ${tile.is_spawn ? 'spawn' : ''} ${tile.is_base ? 'base' : ''}`}>
+                  {/* {tile.id} */}
+                  {here.map(e => (
+                    <div key={e.id} className={`enemy enemy-${e.type}`} />
+                  ))}
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
     </>
 

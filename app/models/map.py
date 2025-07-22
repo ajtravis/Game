@@ -11,6 +11,7 @@ class Map(db.Model):
     spawn = db.Column(db.Integer)
     base = db.Column(db.Integer, nullable=False)
     
+    
     tiles = db.relationship(
         "Tile",
         back_populates="map",

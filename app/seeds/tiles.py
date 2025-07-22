@@ -100,6 +100,7 @@ def seed_tiles():
             [5,11], [4,11], [3,11], [2,11], [1,11], [0,11],
             [0,10], [0, 9], [0, 8], [0, 7], [0, 6],
             [0, 5], [0, 4], [0, 3], [0, 2], [0, 1], [0, 0]
+           
         ],
         2: [
            [0, 0], [1, 0], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4],
@@ -130,28 +131,37 @@ def seed_tiles():
            [0,1], [0,0]
         ]
     }
-
+    path1 = [133, 134, 135, 136, 137, 138, 139, 140, 141, 142,
+            143, 144, 132, 120, 108, 96, 84, 72, 60, 48, 36,
+            24, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
     # Loop over each map and update next_tile for its path
-    for map_id, path_coords in map_paths.items():
-        # Get all tiles for this map
-        tiles = Tile.query.filter_by(map_id=map_id).all()
-        tile_lookup = {(tile.x, tile.y): tile for tile in tiles}
+    # for map_id, path_coords in map_paths.items():
+    #     # Get all tiles for this map
+    #     tiles = Tile.query.filter_by(map_id=map_id).all()
+    #     tile_lookup = {(tile.x, tile.y): tile for tile in tiles}
 
-        # Assign next_tile using the path
-        for i in range(len(path_coords) - 1):
-            current_coord = tuple(path_coords[i])
-            next_coord = tuple(path_coords[i + 1])
+    #     # Assign next_tile using the path
+    #     for i in range(len(path_coords) - 1):
+    #         current_coord = tuple(path_coords[i])
+    #         next_coord = tuple(path_coords[i + 1])
             
-            current_tile = tile_lookup.get(current_coord)
-            next_tile = tile_lookup.get(next_coord)
+    #         current_tile = tile_lookup.get(current_coord)
+    #         next_tile = tile_lookup.get(next_coord)
 
-            if current_tile and next_tile:
-                current_tile.next_tile = next_tile.id
-            else:
-                print(f"Missing tile at {current_coord} or {next_coord} for map {map_id}")
+    #         if current_tile and next_tile:
+    #             current_tile.next_tile = next_tile.id
+    #         else:
+    #             print(f"Missing tile at {current_coord} or {next_coord} for map {map_id}")
 
+    # db.session.commit()
+    i = 0
+    while i < len(path1)-1:
+      cur = path1[i]
+      nxt = path1[i+1]
+      tile = Tile.query.get(cur)
+      tile.next_tile = nxt
+      i+=1
     db.session.commit()
-     
     
 def undo_tiles():
     if environment == "production":

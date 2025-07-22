@@ -1,5 +1,5 @@
 // const GET_ENEMIES = '/enemies/GET_ENEMIES'
- 
+
 // const getEnemies = (enemies) => ({
 // 	type: GET_ENEMIES,
 //     enemies
@@ -38,20 +38,67 @@
 //     }
 // }
 const LOAD_ENEMIES = 'enemies/LOAD';
+const SPAWN_ENEMY = 'enemies/SPAWN';
+const MOVE_ENEMIES = 'enemies/MOVE';
+const DAMAGE_ENEMY = 'enemies/DAMAGE';
+const REMOVE_ENEMY = 'enemies/REMOVE';
 
-const loadEnemies = (protos) => ({ type: LOAD_ENEMIES, protos });
+
+export const loadEnemies = (protos) => ({ type: LOAD_ENEMIES, protos });
+export const spawnEnemy = (enemy) => ({ type: SPAWN_ENEMY, enemy });
+export const moveEnemies = (updatedList) => ({ type: MOVE_ENEMIES, enemies: updatedList });
+export const damageEnemy = (id, amount) => ({ type: DAMAGE_ENEMY, id, amount });
+export const removeEnemy = (id) => ({ type: REMOVE_ENEMY, id });
+
+
 
 export const thunkGetEnemies = () => async (dispatch) => {
-  const res = await fetch('/api/enemies/prototypes');
-  if (res.ok) {
-    const data = await res.json(); // e.g. { basic: {...}, fast: {...}, tanky: {...} }
-    dispatch(loadEnemies(data));
-  }
+	const res = await fetch('/api/enemies/prototypes');
+	if (res.ok) {
+		const data = await res.json(); // e.g. { basic: {...}, fast: {...}, tanky: {...} }
+		dispatch(loadEnemies(data));
+	}
 };
 
+export const thunkSpawnEnemy = (type) => (dispatch, getState) => {
+	const protos = getState().enemies.protos;
+	const proto = protos[type];
+	if (!proto) return;
+
+	const state = getState();
+	const spawn = state.map?.spawn
+	const nt = state.map.tiles[spawn].next_tile
+	console.log(nt)
+	dispatch(spawnEnemy({
+		id: Date.now(),       // unique
+		type,
+		tileId: spawn,
+		hp: proto.health,
+		next_tile: nt
+	}));
+};
+
+export const thunkMoveEnemies = () => async (dispatch, getState) => {
+	const state = getState();
+	const tilesById = state.map.tiles;    // assume this is an object { [tileId]: tileObj }
+	const active = state.enemies.active;  // array of enemy instances
+	console.log(active, "PPPPPPPPPPPPPPPPPPPPP")
+
+	const updated = active.map(enemy => {
+			const currentTile = tilesById[enemy.tileId];
+			if (!currentTile || !currentTile.next_tile) return null;  // reached end or error
+			enemy.tileId = currentTile.next_tile
+			return {
+				...enemy
+			};
+		})
+		.filter(e => e !== null);
+	
+	dispatch(moveEnemies(updated));
+};
 const initialState = {
-  protos: {},    // { basic: {...}, fast: {...}, tanky: {...} }
-  active: []     // will hold { id, type, pathIndex, hp } entries
+	protos: {},    // { basic: {...}, fast: {...}, tanky: {...} }
+	active: []     // will hold { id, type, tileId, hp } entries
 };
 
 export default function enemyReducer(state = initialState, action) {
@@ -61,8 +108,35 @@ export default function enemyReducer(state = initialState, action) {
 			let enemies = action.protos
 			newState.protos = enemies
 			return newState
-		// other cases below...
-		default:
+		case SPAWN_ENEMY:
+			const newEnemy = action.enemy
+			
+			return {
+				...state,
+				active: [...state.active, newEnemy]
+			};
+
+
+		case MOVE_ENEMIES:
+			
+			let updated = action.enemies
+			newState.active = updated
+			return newState
+		case DAMAGE_ENEMY:
+				return {
+					...state,
+					active: state.active
+						.map(e => e.id === action.id ? { ...e, hp: e.hp - action.amount } : e)
+						.filter(e => e.hp > 0)
+				};
+
+				case REMOVE_ENEMY:
+				return {
+					...state,
+					active: state.active.filter(e => e.id !== action.id)
+				};
+				// other cases below...
+				default:
 			return state;
+			}
 	}
-}

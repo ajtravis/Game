@@ -38,4 +38,5 @@ class Tile(db.Model):
             'is_spawn': self.is_spawn,
             'is_base': self.is_base,
             'map_id': self.map_id,
+            'next_tile': self.next_tile
         }

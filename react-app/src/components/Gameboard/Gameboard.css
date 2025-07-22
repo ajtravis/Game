@@ -77,3 +77,66 @@
   align-items: center;
   background-color: #1e1e1e;
 }
+
+/* BASE TILE */
+.tile.base {
+  background: radial-gradient(circle at center, #ff4e50 0%, #8b0000 100%);
+  /* border: px solid #ffaaaa; */
+  box-shadow: inset 0 0 6px #ff6666, 0 0 4px #ff0000;
+  animation: basePulse 2s infinite;
+}
+
+/* SPAWN TILE */
+.tile.spawn {
+  background: linear-gradient(135deg, #00ffff 0%, #004466 100%);
+  /* border: 2px dashed #66ffff; */
+  box-shadow: inset 0 0 5px #00cccc, 0 0 5px #00ffff;
+  animation: spawnGlow 3s infinite linear;
+}
+
+/* ANIMATIONS */
+@keyframes basePulse {
+  0%, 100% {
+    box-shadow: inset 0 0 6px #ff6666, 0 0 4px #ff0000;
+  }
+  50% {
+    box-shadow: inset 0 0 8px #ff9999, 0 0 8px #ff3333;
+  }
+}
+
+@keyframes spawnGlow {
+  0% {
+    box-shadow: inset 0 0 5px #00cccc, 0 0 5px #00ffff;
+  }
+  50% {
+    box-shadow: inset 0 0 8px #66ffff, 0 0 8px #33ccff;
+  }
+  100% {
+    box-shadow: inset 0 0 5px #00cccc, 0 0 5px #00ffff;
+  }
+}
+
+.enemy {
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  margin: auto;
+  background: radial-gradient(circle at center, #555, #222);
+  border: 2px solid #ff4444;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+  animation: enemyPulse 1.5s infinite;
+  position: relative;
+  z-index: 10;
+}
+
+/* Optional pulse animation for a living/enemy feel */
+@keyframes enemyPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 6px rgba(255, 0, 0, 0.5);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 12px rgba(255, 80, 80, 0.8);
+  }
+}

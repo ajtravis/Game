@@ -5,7 +5,7 @@ def seed_enemies():
     # Assuming these are being placed on path tile_id = 1, 2, 3 for seeding purposes
     enemies = [
         Enemy(
-            name="Basic Enemy",
+            name="basic",
             damage=1,
             description="A standard enemy with average speed and health.",
             health=10,
@@ -13,7 +13,7 @@ def seed_enemies():
             tile_id=None  # Replace with actual path tile ID
         ),
         Enemy(
-            name="Fast Enemy",
+            name="fast",
             damage=1,
             description="A fast enemy that moves quickly but is fragile.",
             health=5,
@@ -21,7 +21,7 @@ def seed_enemies():
             tile_id=None  # Replace with actual path tile ID
         ),
         Enemy(
-            name="Tanky Enemy",
+            name="tanky",
             damage=5,
             description="A slow but tough enemy that can take a lot of hits.",
             health=50,

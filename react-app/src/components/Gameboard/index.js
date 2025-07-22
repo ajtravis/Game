@@ -48,12 +48,13 @@ const GameBoard = () => {
     setTiles(() => getGameBoard((id - 1)))
     console.log(tileList)
   }
-
+  
   useEffect(() => {
+    dispatch(thunkGetEnemies())
     dispatch(thunkOneTile(t));
     dispatch(thunkMapTiles(map));
-    dispatch(thunkGetEnemies());
-  }, [dispatch, map]);
+    ;
+  }, [dispatch]);
 
   // const placeTower = (rowIndex, colIndex) => {
 

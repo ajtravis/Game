@@ -45,6 +45,7 @@ const SPAWN_ENEMY = 'enemies/SPAWN';
 const MOVE_ENEMIES = 'enemies/MOVE';
 const DAMAGE_ENEMY = 'enemies/DAMAGE';
 const REMOVE_ENEMY = 'enemies/REMOVE';
+const CLEAR_ALL_ENEMIES = 'enemies/CLEAR_ALL_ENEMIES';
 
 
 export const loadEnemies = (protos) => ({ type: LOAD_ENEMIES, protos });
@@ -157,6 +158,12 @@ export default function enemyReducer(state = initialState, action) {
 			return {
 				...state,
 				active: state.active.filter(e => e.id !== action.id)
+			};
+
+		case CLEAR_ALL_ENEMIES:
+			return {
+				...state,
+				active: []
 			};
 				
 		default:

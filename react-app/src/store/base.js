@@ -2,7 +2,7 @@ const RESET_HEALTH = '/base/RESET_HEALTH'
 const TAKE_DAMAGE = '/base/TAKE_DAMAGE'
 const GAME_OVER = '/base/GAME_OVER'
 
-const resetHealth = () => ({
+export const resetHealth = () => ({
 	type: RESET_HEALTH,
    
 });

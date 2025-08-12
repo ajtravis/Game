@@ -4,7 +4,8 @@ import { thunkOneTile } from '../../store/tile';
 import { thunkMapTiles } from '../../store/map';
 import { thunkGetEnemies, thunkMoveEnemies, thunkSpawnEnemy } from '../../store/enemy';
 import { thunkPlaceTower, thunkTowerAttacks } from '../../store/tower';
-import { setGameOver } from '../../store/base';
+import { setGameOver, resetHealth } from '../../store/base';
+import { resetGame } from '../../store/game';
 import { TowerContext } from '../../context/TowerContext';
 // import { Tower, allTowers } from '../../assets/towers';
 import { generateGameBoard } from '../../assets/getGameBoard';
@@ -54,8 +55,8 @@ const GameBoard = () => {
     dispatch({ type: 'towers/CLEAR_ALL_TOWERS' });
     
     // Reset game state for new map
-    dispatch({ type: 'game/RESET_GAME' });
-    dispatch({ type: 'base/RESET_HEALTH' });
+    dispatch(resetGame());
+    dispatch(resetHealth());
     
     // Clear any active enemies
     dispatch({ type: 'enemies/CLEAR_ALL_ENEMIES' });
@@ -123,22 +124,19 @@ const GameBoard = () => {
     <GameWatcher/>
       <TowerBar
       />
-      <div>
-        <button onClick={() => changeMap(1)}>
-          Map 1
-        </button>
-        <button onClick={() => changeMap(2)}>
-          Map 2
-        </button>
-        <button onClick={() => changeMap(3)}>
-          Map 3
-        </button>
-        <button onClick={() => changeMap(4)}>
-          Map 4
-        </button>
-        <button onClick={() => changeMap(5)}>
-          Map 5
-        </button>
+      <div className="map-selector">
+        <h4>Select Map:</h4>
+        <div className="map-buttons">
+          {[1, 2, 3, 4, 5].map(mapId => (
+            <button 
+              key={mapId}
+              className={`map-button ${map === mapId ? 'active' : ''}`}
+              onClick={() => changeMap(mapId)}
+            >
+              Map {mapId}
+            </button>
+          ))}
+        </div>
       </div>
       <div className="game-board-wrapper">
         <div className="game-stats">

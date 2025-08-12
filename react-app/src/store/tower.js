@@ -4,6 +4,7 @@ import { damageEnemy, removeEnemy } from './enemy';
 const PLACE_TOWER = 'towers/PLACE_TOWER';
 const REMOVE_TOWER = 'towers/REMOVE_TOWER';
 const TOWER_ATTACK = 'towers/TOWER_ATTACK';
+const CLEAR_ALL_TOWERS = 'towers/CLEAR_ALL_TOWERS';
 
 // Action creators
 export const placeTower = (tileId, towerType, towerData) => ({
@@ -169,6 +170,13 @@ export default function towerReducer(state = initialState, action) {
                         timestamp: Date.now()
                     }
                 ]
+            };
+            
+        case CLEAR_ALL_TOWERS:
+            return {
+                ...state,
+                placed: {},
+                attacks: []
             };
             
         default:

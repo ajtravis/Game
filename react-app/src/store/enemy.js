@@ -1,6 +1,7 @@
 // const GET_ENEMIES = '/enemies/GET_ENEMIES'
 
 import { takeDamage } from "./base";
+import { thunkEnemyKilled } from "./game";
 
 // const getEnemies = (enemies) => ({
 // 	type: GET_ENEMIES,
@@ -134,11 +135,22 @@ export default function enemyReducer(state = initialState, action) {
 			newState.active = updated
 			return newState;
 		case DAMAGE_ENEMY:
+				const updatedEnemies = state.active.map(e => 
+					e.id === action.id ? { ...e, hp: e.hp - action.amount } : e
+				);
+				
+				// Find killed enemies and reward player
+				const killedEnemies = updatedEnemies.filter(e => e.hp <= 0);
+				killedEnemies.forEach(enemy => {
+					// Dispatch reward for killed enemy (this will be handled by middleware)
+					setTimeout(() => {
+						window.store?.dispatch(thunkEnemyKilled(enemy.type));
+					}, 0);
+				});
+				
 				return {
 					...state,
-					active: state.active
-						.map(e => e.id === action.id ? { ...e, hp: e.hp - action.amount } : e)
-						.filter(e => e.hp > 0)
+					active: updatedEnemies.filter(e => e.hp > 0)
 				};
 
 		case REMOVE_ENEMY:

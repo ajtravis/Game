@@ -52,16 +52,31 @@
   opacity: 0.8;
 }
 
-/* Tower type colors */
-.tower-basic {
-  background-color: #3498db;
+/* Tower button type colors - using more specific selectors */
+.tower-button.tower-basic {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  border-color: #2980b9;
 }
 
-.tower-fast {
-  background-color: #f1c40f;
+.tower-button.tower-fast {
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  border-color: #f39c12;
   color: #333;
 }
 
-.tower-close {
-  background-color: #e74c3c;
+.tower-button.tower-close {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  border-color: #c0392b;
+}
+
+.tower-button.tower-basic:hover {
+  background: linear-gradient(135deg, #5dade2, #3498db);
+}
+
+.tower-button.tower-fast:hover {
+  background: linear-gradient(135deg, #f4d03f, #f1c40f);
+}
+
+.tower-button.tower-close:hover {
+  background: linear-gradient(135deg, #ec7063, #e74c3c);
 }

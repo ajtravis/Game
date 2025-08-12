@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { thunkOneTile } from '../../store/tile';
 import { thunkMapTiles } from '../../store/map';
 import { thunkGetEnemies, thunkMoveEnemies, thunkSpawnEnemy } from '../../store/enemy';
+import { thunkPlaceTower, thunkTowerAttacks } from '../../store/tower';
+import { setGameOver } from '../../store/base';
 import { TowerContext } from '../../context/TowerContext';
 // import { Tower, allTowers } from '../../assets/towers';
 import { generateGameBoard } from '../../assets/getGameBoard';
@@ -28,17 +30,35 @@ const GameBoard = () => {
 
   const tileList = useSelector(state => Object.values(state.map?.tiles));
   const { protos, active } = useSelector(s => s.enemies);
-  const baseHealth = useSelector(state => state.base?.baseHp)
+  const baseHealth = useSelector(state => state.base?.baseHp);
+  const placedTowers = useSelector(state => state.towers?.placed || {});
+  const playerMoney = useSelector(state => state.game?.money || 0);
+  const playerScore = useSelector(state => state.game?.score || 0);
 
   const isGameOver = useSelector(state => state.base?.isGameOver);
-  const health = useSelector(state => state.base?.health);
+  const health = useSelector(state => state.base?.baseHp);
 
 
   const grid = to12x12Grid(tileList);
   const changeMap = (id) => {
-    setMap(id)
-    setTiles(() => getGameBoard((id - 1)))
-    console.log(tileList)
+    console.log('Changing to map:', id);
+    setMap(id);
+    
+    // Get the new map data from the static assets
+    const newMapData = getGameBoard((id - 1));
+    setTiles(() => newMapData);
+    
+    // Clear any existing towers when changing maps
+    // This prevents towers from previous maps from staying
+    // We'll need to add this action to the tower store
+    dispatch({ type: 'towers/CLEAR_ALL_TOWERS' });
+    
+    // Reset game state for new map
+    dispatch({ type: 'game/RESET_GAME' });
+    dispatch({ type: 'base/RESET_HEALTH' });
+    
+    // Clear any active enemies
+    dispatch({ type: 'enemies/CLEAR_ALL_ENEMIES' });
   }
 
   useEffect(() => {
@@ -74,30 +94,27 @@ const GameBoard = () => {
     return () => clearInterval(tick);
   }, [dispatch]);
 
+  // tower attacks every tick
+  useEffect(() => {
+    const attackTick = setInterval(() => {
+      dispatch(thunkTowerAttacks());
+    }, 100); // Check for attacks more frequently
+    return () => clearInterval(attackTick);
+  }, [dispatch]);
+
   useEffect(() => {
     dispatch(thunkOneTile(t));
     dispatch(thunkMapTiles(map));
     ;
   }, [dispatch]);
 
-  // const placeTower = (rowIndex, colIndex) => {
-
-  //   setTiles(prev => {
-  //     const newTiles = prev.map((row, r) =>
-  //       row.map((tile, c) => {
-  //         if (r === rowIndex && c === colIndex && !tile.hasTower && !tile.isPath) {
-  //           return {
-  //             ...tile,
-  //             hasTower: true,
-  //             tower: towerType
-  //           };
-  //         }
-  //         return tile;
-  //       })
-  //     );
-  //     return newTiles;
-  //   });
-  // };
+  // Tower placement function
+  const placeTower = (tileId) => {
+    const success = dispatch(thunkPlaceTower(tileId, towerType));
+    if (!success) {
+      console.log('Cannot place tower here');
+    }
+  };
 
 
 
@@ -119,12 +136,17 @@ const GameBoard = () => {
         <button onClick={() => changeMap(4)}>
           Map 4
         </button>
-        <button onClick={() => changeMap(4)}>
+        <button onClick={() => changeMap(5)}>
           Map 5
         </button>
       </div>
       <div className="game-board-wrapper">
-        <h4>Base: {baseHealth}</h4>
+        <div className="game-stats">
+          <h4>Base Health: {baseHealth}</h4>
+          <h4>Money: ${playerMoney}</h4>
+          <h4>Score: {playerScore}</h4>
+          <h4>Selected Tower: {towerType}</h4>
+        </div>
         <div
           className="grid-board"
           style={{ gridTemplateColumns: 'repeat(12, 32px)' }}
@@ -132,9 +154,21 @@ const GameBoard = () => {
           {grid.map((row, r) =>
             row.map(tile => {
               const here = active.filter(e => e.tileId === tile.id);
+              const tower = placedTowers[tile.id];
               return (
-                <div key={tile.id} className={`${tile.id} tile ${tile.is_path ? 'path' : 'empty'} ${tile.is_spawn ? 'spawn' : ''} ${tile.is_base ? 'base' : ''}`}>
-                  {/* {tile.id} */}
+                <div 
+                  key={tile.id} 
+                  className={`${tile.id} tile ${tile.is_path ? 'path' : 'empty'} ${tile.is_spawn ? 'spawn' : ''} ${tile.is_base ? 'base' : ''} ${tower ? 'has-tower' : ''}`}
+                  onClick={() => !tile.is_path && !tile.is_spawn && !tile.is_base && !tower && placeTower(tile.id)}
+                  style={{ cursor: (!tile.is_path && !tile.is_spawn && !tile.is_base && !tower) ? 'pointer' : 'default' }}
+                >
+                  {/* Show tower if placed */}
+                  {tower && (
+                    <div className={`tower tower-${tower.type}`}>
+                      T
+                    </div>
+                  )}
+                  {/* Show enemies */}
                   {here.map(e => (
                     <div key={e.id} className={`enemy enemy-${e.type}`} />
                   ))}

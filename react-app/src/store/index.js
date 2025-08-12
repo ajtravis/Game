@@ -5,13 +5,17 @@ import tilesReducer from './tile';
 import mapReducer from './map';
 import enemyReducer from './enemy';
 import baseReducer from './base';
+import towerReducer from './tower';
+import gameReducer from './game';
 
 const rootReducer = combineReducers({
   session,
   tiles: tilesReducer,
   map: mapReducer,
   enemies: enemyReducer,
-  base: baseReducer
+  base: baseReducer,
+  towers: towerReducer,
+  game: gameReducer
 });
 
 
@@ -27,7 +31,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const configureStore = (preloadedState) => {
-  return createStore(rootReducer, preloadedState, enhancer);
+  const store = createStore(rootReducer, preloadedState, enhancer);
+  // Make store globally available for enemy reward system
+  window.store = store;
+  return store;
 };
 
 export default configureStore;

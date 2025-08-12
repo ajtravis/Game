@@ -8,7 +8,7 @@ import { TowerContext } from '../../context/TowerContext';
 import { generateGameBoard } from '../../assets/getGameBoard';
 import { getGameBoard } from '../../assets/maps';
 import { to12x12Grid } from './CreateMap';
-
+import GameWatcher from './gameWatcher';
 
 import TowerBar from '../TowerBar';
 import towersObj from '../../assets/towers';
@@ -28,7 +28,10 @@ const GameBoard = () => {
 
   const tileList = useSelector(state => Object.values(state.map?.tiles));
   const { protos, active } = useSelector(s => s.enemies);
+  const baseHealth = useSelector(state => state.base?.baseHp)
 
+  const isGameOver = useSelector(state => state.base?.isGameOver);
+  const health = useSelector(state => state.base?.health);
 
 
   const grid = to12x12Grid(tileList);
@@ -38,16 +41,28 @@ const GameBoard = () => {
     console.log(tileList)
   }
 
+  useEffect(() => {
+    if (health <= 0) {
+      dispatch(setGameOver(true));
+
+      // You could also trigger a modal, animation, etc. here
+    }
+  }, [health, dispatch]);
+
+  useEffect(() => {
+    dispatch(thunkGetEnemies());
+  }, [dispatch,]);
+
   // fetch protos
   useEffect(() => {
     dispatch(thunkGetEnemies());
-  }, [dispatch]);
+  }, [dispatch,]);
 
   // spawn a new enemy every 3s
   useEffect(() => {
     const id = setInterval(() => {
       dispatch(thunkSpawnEnemy('basic')); // or cycle types
-    }, 3000);
+    }, 1000);
     return () => clearInterval(id);
   }, [dispatch]);
 
@@ -55,7 +70,7 @@ const GameBoard = () => {
   useEffect(() => {
     const tick = setInterval(() => {
       dispatch(thunkMoveEnemies());
-    }, 2000);
+    }, 500);
     return () => clearInterval(tick);
   }, [dispatch]);
 
@@ -88,6 +103,7 @@ const GameBoard = () => {
 
   return (
     <>
+    <GameWatcher/>
       <TowerBar
       />
       <div>
@@ -108,6 +124,7 @@ const GameBoard = () => {
         </button>
       </div>
       <div className="game-board-wrapper">
+        <h4>Base: {baseHealth}</h4>
         <div
           className="grid-board"
           style={{ gridTemplateColumns: 'repeat(12, 32px)' }}

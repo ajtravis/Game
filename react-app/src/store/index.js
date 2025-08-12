@@ -4,12 +4,14 @@ import session from './session';
 import tilesReducer from './tile';
 import mapReducer from './map';
 import enemyReducer from './enemy';
+import baseReducer from './base';
 
 const rootReducer = combineReducers({
   session,
   tiles: tilesReducer,
   map: mapReducer,
-  enemies: enemyReducer
+  enemies: enemyReducer,
+  base: baseReducer
 });
 
 

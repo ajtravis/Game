@@ -1,5 +1,7 @@
 // const GET_ENEMIES = '/enemies/GET_ENEMIES'
 
+import { takeDamage } from "./base";
+
 // const getEnemies = (enemies) => ({
 // 	type: GET_ENEMIES,
 //     enemies
@@ -73,6 +75,7 @@ export const thunkSpawnEnemy = (type) => (dispatch, getState) => {
 		id: Date.now(),       // unique
 		type,
 		tileId: spawn,
+		dmg: 10,
 		hp: proto.health,
 		next_tile: nt
 	}));
@@ -80,17 +83,26 @@ export const thunkSpawnEnemy = (type) => (dispatch, getState) => {
 
 export const thunkMoveEnemies = () => async (dispatch, getState) => {
 	const state = getState();
+	const base = state.map?.base;
 	const tilesById = state.map.tiles;    // assume this is an object { [tileId]: tileObj }
 	const active = state.enemies.active;  // array of enemy instances
 	console.log(active, "PPPPPPPPPPPPPPPPPPPPP")
 
 	const updated = active.map(enemy => {
 			const currentTile = tilesById[enemy.tileId];
-			if (!currentTile || !currentTile.next_tile) return null;  // reached end or error
-			enemy.tileId = currentTile.next_tile
-			return {
-				...enemy
-			};
+			if (currentTile.next_tile == base){
+				dispatch(takeDamage(enemy.dmg))
+				dispatch(removeEnemy(enemy.id));
+				return null;
+			}
+			else if (!currentTile || !currentTile.next_tile) return null;  // reached end or error
+			
+			
+			else {
+				enemy.tileId = currentTile.next_tile
+				return {
+					...enemy
+				};}
 		})
 		.filter(e => e !== null);
 	
@@ -110,7 +122,7 @@ export default function enemyReducer(state = initialState, action) {
 			return newState
 		case SPAWN_ENEMY:
 			const newEnemy = action.enemy
-			
+			console.log("LLLLLLLLLLLLLLLLL", newEnemy)
 			return {
 				...state,
 				active: [...state.active, newEnemy]
@@ -118,10 +130,9 @@ export default function enemyReducer(state = initialState, action) {
 
 
 		case MOVE_ENEMIES:
-			
 			let updated = action.enemies
 			newState.active = updated
-			return newState
+			return newState;
 		case DAMAGE_ENEMY:
 				return {
 					...state,
@@ -130,13 +141,13 @@ export default function enemyReducer(state = initialState, action) {
 						.filter(e => e.hp > 0)
 				};
 
-				case REMOVE_ENEMY:
-				return {
-					...state,
-					active: state.active.filter(e => e.id !== action.id)
-				};
-				// other cases below...
-				default:
+		case REMOVE_ENEMY:
+			return {
+				...state,
+				active: state.active.filter(e => e.id !== action.id)
+			};
+				
+		default:
 			return state;
 			}
 	}

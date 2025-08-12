@@ -9,7 +9,7 @@ def seed_enemies():
             damage=1,
             description="A standard enemy with average speed and health.",
             health=10,
-            speed=1,
+            speed=5,
             tile_id=None  # Replace with actual path tile ID
         ),
         Enemy(
@@ -17,7 +17,7 @@ def seed_enemies():
             damage=1,
             description="A fast enemy that moves quickly but is fragile.",
             health=5,
-            speed=5,
+            speed=10,
             tile_id=None  # Replace with actual path tile ID
         ),
         Enemy(

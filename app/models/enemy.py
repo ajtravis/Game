@@ -14,7 +14,7 @@ class Enemy(db.Model):
     health = db.Column(db.Integer, nullable=False)
     speed = db.Column(db.Integer, nullable=False)
     tile_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("tiles.id")))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    # created_at = db.Column(db.DateTime, default=datetime.utcnow)  # Temporarily commented out until migration is applied
 
     # relationships
     enemy_tile = db.relationship("Tile", back_populates="tile_enemy")
@@ -27,8 +27,6 @@ class Enemy(db.Model):
             'description': self.description,
             'health': self.health,
             'speed': self.speed,
-            'tile_id': self.tile_id,
-            'created_at': self.created_at
+            'tile_id': self.tile_id
+            # 'created_at': getattr(self, 'created_at', None).isoformat() if getattr(self, 'created_at', None) else None  # Temporarily removed
         }
-
-    

@@ -6,6 +6,8 @@ import LoginFormPage from "./components/LoginFormPage";
 import { authenticate } from "./store/session";
 import Navigation from "./components/Navigation";
 import Gameboard from "./components/Gameboard";
+import ErrorBoundary from "./components/ErrorBoundary";
+import ErrorNotification from "./components/ErrorNotification";
 
 function App() {
   const dispatch = useDispatch();
@@ -15,7 +17,8 @@ function App() {
   }, [dispatch]);
 
   return (
-    <>
+    <ErrorBoundary>
+      <ErrorNotification />
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
@@ -30,7 +33,7 @@ function App() {
           </Route>
         </Switch>
       )}
-    </>
+    </ErrorBoundary>
   );
 }
 

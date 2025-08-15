@@ -1,5 +1,6 @@
 const GET_MAP_TILES = '/maps/GET_MAP_TITLES'
 const CHANGE_MAP = '/maps/CHANGE_MAP'
+const SET_CURRENT_MAP = '/maps/SET_CURRENT_MAP'
 
 const getMapTiles = (map) => ({
 	type: GET_MAP_TILES,
@@ -41,6 +42,9 @@ export default function mapReducer(state = initialState, action) {
 			newState.tiles = {}
 			let tiles = action.map.tiles;
 			for (let t of tiles) newState.tiles[t.id] = t;
+			return newState;
+		case SET_CURRENT_MAP:
+			newState.id = action.payload.id;
 			return newState;
         default:
             return state;

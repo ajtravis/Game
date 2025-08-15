@@ -1,5 +1,7 @@
 // Tower store for managing placed towers and attacks
 import { damageEnemy, removeEnemy } from './enemy';
+import { thunkEnemyKilled } from "./game";
+import { handleGameError, addError } from "./errors";
 
 const PLACE_TOWER = 'towers/PLACE_TOWER';
 const REMOVE_TOWER = 'towers/REMOVE_TOWER';
@@ -28,48 +30,70 @@ export const towerAttack = (towerId, enemyId, damage) => ({
 
 // Thunk for placing a tower with validation
 export const thunkPlaceTower = (tileId, towerType) => (dispatch, getState) => {
-    const state = getState();
-    const tile = state.map.tiles[tileId];
-    const existingTower = state.towers.placed[tileId];
-    const playerMoney = state.game.money;
-    
-    // Tower costs
-    const towerCosts = {
-        basic: 10,
-        fast: 15,
-        close: 20
-    };
-    
-    const cost = towerCosts[towerType] || 10;
-    
-    // Validation
-    if (!tile) return false;
-    if (tile.is_path || tile.is_spawn || tile.is_base) return false;
-    if (existingTower) return false;
-    if (playerMoney < cost) return false;
-    
-    // Tower stats
-    const towerStats = {
-        basic: { damage: 5, range: 2, attackSpeed: 1000 }, // 1 second
-        fast: { damage: 2, range: 2, attackSpeed: 300 },   // 0.3 seconds
-        close: { damage: 15, range: 1, attackSpeed: 1500 } // 1.5 seconds
-    };
-    
-    const stats = towerStats[towerType];
-    const towerData = {
-        id: `tower_${tileId}_${Date.now()}`,
-        type: towerType,
-        tileId,
-        damage: stats.damage,
-        range: stats.range,
-        attackSpeed: stats.attackSpeed,
-        lastAttack: 0
-    };
-    
-    dispatch(placeTower(tileId, towerType, towerData));
-    dispatch({ type: 'game/SPEND_MONEY', amount: cost });
-    
-    return true;
+    try {
+        const state = getState();
+        const existingTower = state.towers.placed[tileId];
+        const playerMoney = state.game?.money || 0;
+        
+        // Tower costs
+        const towerCosts = {
+            basic: 50,
+            sniper: 100,
+            cannon: 150
+        };
+        
+        const cost = towerCosts[towerType] || 50;
+        
+        // Validation
+        if (existingTower) {
+            dispatch(addError({
+                title: 'Tower Placement Failed',
+                message: 'This tile already has a tower',
+                type: 'warning'
+            }));
+            return false;
+        }
+        
+        if (playerMoney < cost) {
+            dispatch(addError({
+                title: 'Insufficient Funds',
+                message: `Need $${cost} to place ${towerType} tower. You have $${playerMoney}`,
+                type: 'warning'
+            }));
+            return false;
+        }
+        
+        // Tower stats
+        const towerStats = {
+            basic: { damage: 25, range: 2, attackSpeed: 1000 },
+            sniper: { damage: 75, range: 4, attackSpeed: 2000 },
+            cannon: { damage: 100, range: 1.5, attackSpeed: 3000 }
+        };
+        
+        const stats = towerStats[towerType] || towerStats.basic;
+        
+        const towerData = {
+            id: Date.now(),
+            type: towerType,
+            tileId: tileId,
+            ...stats,
+            lastAttack: 0
+        };
+        
+        dispatch(placeTower(tileId, towerType, towerData));
+        dispatch({ type: 'game/SPEND_MONEY', amount: cost });
+        
+        dispatch(addError({
+            title: 'Tower Placed',
+            message: `${towerType} tower placed successfully for $${cost}`,
+            type: 'info'
+        }));
+        
+        return true;
+    } catch (error) {
+        dispatch(handleGameError(error, 'place tower'));
+        return false;
+    }
 };
 
 // Thunk for tower attacks
@@ -77,25 +101,26 @@ export const thunkTowerAttacks = () => (dispatch, getState) => {
     const state = getState();
     const towers = Object.values(state.towers.placed);
     const enemies = state.enemies.active;
-    const tiles = state.map.tiles;
     const currentTime = Date.now();
     
     towers.forEach(tower => {
         // Check if tower can attack (cooldown)
         if (currentTime - tower.lastAttack < tower.attackSpeed) return;
         
-        const towerTile = tiles[tower.tileId];
-        if (!towerTile) return;
+        // Calculate tower position from tileId
+        const towerRow = Math.floor(tower.tileId / 12);
+        const towerCol = tower.tileId % 12;
         
         // Find enemies in range
         const enemiesInRange = enemies.filter(enemy => {
-            const enemyTile = tiles[enemy.tileId];
-            if (!enemyTile) return false;
+            // Calculate enemy position from tileId
+            const enemyRow = Math.floor(enemy.tileId / 12);
+            const enemyCol = enemy.tileId % 12;
             
             // Calculate distance between tower and enemy
             const distance = Math.sqrt(
-                Math.pow(towerTile.x - enemyTile.x, 2) + 
-                Math.pow(towerTile.y - enemyTile.y, 2)
+                Math.pow(towerCol - enemyCol, 2) + 
+                Math.pow(towerRow - enemyRow, 2)
             );
             
             return distance <= tower.range;

@@ -1,34 +1,30 @@
-import {React, useContext} from 'react';
+import React, { useContext, memo, useMemo } from 'react';
 import { TowerContext } from '../../context/TowerContext';
 import towersObj from '../../assets/towers';
 import './TowerBar.css';
 
-
-
-const TowerBar = ({  }) => {
+const TowerBar = memo(() => {
   const { towerType, setTowerType } = useContext(TowerContext)
   const towers = Object.keys(towersObj)
-  const info = {
-    
-      'basic':{
+  
+  // Memoize tower info to prevent recreation on every render
+  const info = useMemo(() => ({
+    'basic': {
       colorClass: 'tower-basic',
       description: 'Balanced attack & range',
       emoji: '🏹',
     },
-    
-      'fast':{
+    'fast': {
       colorClass: 'tower-fast',
       description: 'Low damage, high speed',
       emoji: '⚡',
     },
-    
-      'close':{
+    'close': {
       colorClass: 'tower-strong',
       description: 'Heavy damage, short range',
       emoji: '💣',
     },
-  };
-  let t = {}
+  }), []);
   return (
      
     <div className='tower-bar'>
@@ -48,6 +44,8 @@ const TowerBar = ({  }) => {
       ))}
     </div>
   );
-};
+});
+
+TowerBar.displayName = 'TowerBar';
 
 export default TowerBar;

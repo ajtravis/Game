@@ -7,6 +7,7 @@ import enemyReducer from './enemy';
 import baseReducer from './base';
 import towerReducer from './tower';
 import gameReducer from './game';
+import errorsReducer from './errors';
 
 const rootReducer = combineReducers({
   session,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   enemies: enemyReducer,
   base: baseReducer,
   towers: towerReducer,
-  game: gameReducer
+  game: gameReducer,
+  errors: errorsReducer
 });
 
 

@@ -1,0 +1,178 @@
+/* Error Notification Styles */
+.error-notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.error-notification {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  animation: slideInRight 0.3s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.error-notification.error {
+  border-left-color: #e74c3c;
+  background: linear-gradient(135deg, #fff5f5, #ffffff);
+}
+
+.error-notification.warning {
+  border-left-color: #f39c12;
+  background: linear-gradient(135deg, #fffbf0, #ffffff);
+}
+
+.error-notification.info {
+  border-left-color: #3498db;
+  background: linear-gradient(135deg, #f0f9ff, #ffffff);
+}
+
+.error-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
+.error-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.error-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.error-title {
+  font-weight: 600;
+  color: #2d3436;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.error-message {
+  color: #636e72;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.error-dismiss {
+  background: none;
+  border: none;
+  color: #636e72;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.error-dismiss:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #2d3436;
+}
+
+.dismiss-all-button {
+  background: linear-gradient(135deg, #636e72, #2d3436);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: flex-end;
+  margin-top: 8px;
+}
+
+.dismiss-all-button:hover {
+  background: linear-gradient(135deg, #2d3436, #636e72);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Auto-dismiss progress bar */
+.error-notification::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00b894, #00cec9);
+  animation: progressBar 5s linear forwards;
+}
+
+.error-notification.error::after {
+  background: linear-gradient(90deg, #e74c3c, #c0392b);
+}
+
+.error-notification.warning::after {
+  background: linear-gradient(90deg, #f39c12, #e67e22);
+}
+
+.error-notification.info::after {
+  background: linear-gradient(90deg, #3498db, #2980b9);
+}
+
+/* Animations */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes progressBar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .error-notification-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+  
+  .error-notification {
+    padding: 12px;
+  }
+  
+  .error-title {
+    font-size: 0.9rem;
+  }
+  
+  .error-message {
+    font-size: 0.8rem;
+  }
+}

@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask, render_template, request, session, redirect
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -11,6 +12,7 @@ from .api.tile_routes import tile_routes
 from .api.map_routes import map_routes
 from .api.enemy_routes import enemy_routes
 from .seeds import seed_commands
+from .error_handlers import register_error_handlers
 from .config import Config
 
 app = Flask(__name__, static_folder='../react-app/build', static_url_path='/')
@@ -29,6 +31,16 @@ def load_user(id):
 app.cli.add_command(seed_commands)
 
 app.config.from_object(Config)
+
+# Configure logging
+if not app.debug:
+    logging.basicConfig(level=logging.INFO)
+else:
+    logging.basicConfig(level=logging.DEBUG)
+
+# Register error handlers
+register_error_handlers(app)
+
 app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(tile_routes, url_prefix='/api/tiles')

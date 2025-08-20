@@ -5,6 +5,6 @@ __pycache__/
 .DS_Store
 .vscode/
 *dev.db
-node_modules
+**/node_modules/
 .flaskenv
 migrations/versions/0cfa225a0bed_.py

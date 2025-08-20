@@ -8,3 +8,5 @@ __pycache__/
 **/node_modules/
 .flaskenv
 migrations/versions/0cfa225a0bed_.py
+/node_modules
+/react-app/node_modules/
